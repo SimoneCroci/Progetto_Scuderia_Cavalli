@@ -1,0 +1,12 @@
+eccezioni\EccezionePosizioneOccupata.class
+com\mycompany\_scuderia_cavalli\App.class
+com\mycompany\_scuderia_cavalli\Scuderia.class
+eccezioni\EccezionePosizioneVuota.class
+utilita\Menu.class
+eccezioni\EccezioneRipianoNonValido.class
+utilita\Ordinatore.class
+eccezioni\EccezionePosizioneNonValida.class
+utilita\ConsoleInput.class
+com\mycompany\_scuderia_cavalli\Cavallo.class
+eccezioni\FileException.class
+com\mycompany\_scuderia_cavalli\Fantino.class
