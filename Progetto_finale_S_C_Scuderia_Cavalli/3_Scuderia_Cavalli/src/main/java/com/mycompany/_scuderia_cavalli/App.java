@@ -3,6 +3,7 @@ package com.mycompany._scuderia_cavalli;
 import eccezioni.FileException;
 import java.io.*;
 import java.util.Scanner;
+import utilita.Menu;
 
 public class App {
     public static void main(String[] args) {
@@ -12,7 +13,7 @@ public class App {
         Cavallo[] listaCavalli = new Cavallo[30];
         Fantino[] listaFantini = new Fantino[30];
         Scuderia[] listaScuderie = new Scuderia[6];
-
+        
         // Loop del menu
         boolean continuaMenu = true; 
         while (continuaMenu) { 
@@ -45,6 +46,7 @@ public class App {
                         break;
                     case 3:
                         visualizzaListaCavalli(listaCavalli);
+                        continuaMenu=false;
                         break;
                     case 4:
                         visualizzaListaFantini(listaFantini);

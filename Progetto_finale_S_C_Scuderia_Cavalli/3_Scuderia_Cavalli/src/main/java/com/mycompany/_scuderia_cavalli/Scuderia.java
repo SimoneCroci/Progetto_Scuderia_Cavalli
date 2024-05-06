@@ -1,32 +1,31 @@
 package com.mycompany._scuderia_cavalli;
 
-import java.io.*;
-import java.util.*;
+import static com.mycompany._scuderia_cavalli.Fantino.N_MAX_FANTINI;
 import eccezioni.EccezionePosizioneNonValida;
 import eccezioni.EccezionePosizioneOccupata;
 import eccezioni.EccezionePosizioneVuota;
-import eccezioni.EccezioneRipianoNonValido;
-import eccezioni.FileException;
-import java.io.FileInputStream;
+import java.io.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.plaf.metal.MetalBorders;
-import utilita.ConsoleInput;
-import utilita.Menu;
 
 public class Scuderia {
+    private Cavallo[] cavalli;
+    private Fantino[] fantini;
+    private Scuderia[] scuderie;
+    private int nCavalli;
+    private int nFantini;
+    private int nScuderie;
     private String numeroFantino;
     private String nomeFantino;
     private String nomeCavallo;
+    
     private String sede;
     private int annoFondazione;
     static final int N_MAX_SCUDERIE = 6;
+    static final int N_MAX_FANTINI= 30;
+    static final int N_MAX_CAVALLI= 30;
 
     // Costruttore
     public Scuderia(String numeroFantino, String nomeFantino, String nomeCavallo, String sede, int annoFondazione) {
@@ -35,6 +34,7 @@ public class Scuderia {
         this.nomeCavallo = nomeCavallo;
         this.sede = sede;
         this.annoFondazione = annoFondazione;
+        nCavalli=0;
     }
 
     // Costruttore di copia
@@ -87,76 +87,58 @@ public class Scuderia {
     public void setAnnoFondazione(int annoFondazione) {
         this.annoFondazione = annoFondazione;
     }
-
-    // Metodo per aggiungere una scuderia
-    public void aggiungiScuderia(String numeroFantino, String nomeFantino, String nomeCavallo, String sede, int annoFondazione) 
+    
+    // rimuovi
+    
+     public void rimuoviFantino(int posizione) throws EccezionePosizioneNonValida, EccezionePosizioneVuota
     {
-        this.numeroFantino = numeroFantino;
-        this.nomeFantino = nomeFantino;
-        this.nomeCavallo = nomeCavallo;
-        this.sede = sede;
-        this.annoFondazione = annoFondazione;
+        
+        if(posizione<0 || posizione>N_MAX_FANTINI)
+            throw new EccezionePosizioneNonValida();
+ 
+        if (fantini[posizione]==null)
+                throw new EccezionePosizioneVuota();
+        fantini[posizione]=null;
+        //    return posizione;  
     }
 
-    // Metodo per rimuovere una scuderia
-    public void rimuoviScuderia(String numeroFantino) {
-        if (this.numeroFantino.equals(numeroFantino)) {
-            this.numeroFantino = null;
-            this.nomeFantino = null;
-            this.nomeCavallo = null;
-            this.sede = null;
-            this.annoFondazione = 0;
-        }
+      public void rimuoviCavallo(int posizione) throws EccezionePosizioneNonValida, EccezionePosizioneVuota
+    {
+        
+        if(posizione<0 || posizione>N_MAX_CAVALLI)
+            throw new EccezionePosizioneNonValida();
+ 
+        if (scuderie[posizione]==null)
+                throw new EccezionePosizioneVuota();
+        scuderie[posizione]=null;
+        //    return posizione;  
     }
-
-    // Metodo per modificare una scuderia
-    public void modificaScuderia(String numeroFantino, String nuovoNomeFantino, String nuovoNomeCavallo, String nuovaSede, int nuovoAnnoFondazione) {
-        if (this.numeroFantino.equals(numeroFantino)) {
-            this.nomeFantino = nuovoNomeFantino;
-            this.nomeCavallo = nuovoNomeCavallo;
-            this.sede = nuovaSede;
-            this.annoFondazione = nuovoAnnoFondazione;
-        }
+    
+      //aggiungi
+      
+      public void aggiungiCavallo(Cavallo cavallo, int posizione) throws EccezionePosizioneNonValida, EccezionePosizioneOccupata
+    {
+        if (posizione<0 || posizione>=N_MAX_CAVALLI)
+           throw new EccezionePosizioneNonValida();
+        if(cavalli[posizione]!=null)
+              throw new EccezionePosizioneOccupata();
+        cavalli[posizione]=new Cavallo(cavallo);
+        //return posizione;  
     }
-
-    // Metodo per salvare in formato CSV
-    public void salvaCSV(String nomeFile) {
-        try (PrintWriter writer = new PrintWriter(nomeFile)) {
-            writer.println(numeroFantino + "," + nomeFantino + "," + nomeCavallo + "," + sede + "," + annoFondazione);
-        } catch (FileNotFoundException e) {
-            System.out.println("Errore: Impossibile scrivere su file CSV.");
-        }
+    
+     public void aggiungiFantino(Fantino fantino, int posizione) throws EccezionePosizioneNonValida, EccezionePosizioneOccupata
+    {
+        if (posizione<0 || posizione>=N_MAX_FANTINI)
+           throw new EccezionePosizioneNonValida();
+        if(fantini[posizione]!=null)
+              throw new EccezionePosizioneOccupata();
+        fantini[posizione]=new Fantino(fantino);
+        //return posizione;  
     }
-
-    // Metodo per salvare in formato binario
-    public void salvaBinario(String nomeFile) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nomeFile))) {
-            oos.writeObject(this);
-            System.out.println("Salvataggio binario completato.");
-        } catch (IOException e) {
-            System.out.println("Errore: Impossibile scrivere su file binario.");
-        }
+     
+     
+     
     }
-
-    // Metodo per ordinare le scuderie per nome fantino
-    public void ordinaScuderiePerNomeFantino(Scuderia[] listaScuderie) {
-        boolean ordinato = false;
-        while (!ordinato) {
-            ordinato = true;
-            for (int i = 0; i < N_MAX_SCUDERIE - 1; i++) {
-                if (listaScuderie[i] == null || listaScuderie[i + 1] == null) {
-                    continue;
-                }
-                if (listaScuderie[i].getNomeFantino().compareTo(listaScuderie[i + 1].getNomeFantino()) > 0) {
-                    Scuderia temp = listaScuderie[i];
-                    listaScuderie[i] = listaScuderie[i + 1];
-                    listaScuderie[i + 1] = temp;
-                    ordinato = false;
-                }
-            }
-        }
-    }
-
     @Override
     public String toString() {
         return "Scuderia{" + "numeroFantino=" + numeroFantino + ", nomeFantino=" + nomeFantino + ", nomeCavallo=" + nomeCavallo + ", sede=" + sede + ", annoFondazione=" + annoFondazione + '}';
