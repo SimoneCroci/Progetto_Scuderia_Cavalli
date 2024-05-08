@@ -62,7 +62,7 @@ public class Menu
      * @return Il valore intero associato alla voce scelta
      * 
      */
-    public int sceltaMenu()
+    public int sceltaMenu() throws IOException
     {
 	String inputUtente;
 	int sceltaUtente=0;
